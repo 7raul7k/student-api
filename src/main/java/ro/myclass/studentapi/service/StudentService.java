@@ -87,11 +87,51 @@ public class StudentService {
            }
             this.studentRepo.saveAndFlush(student.get());
         }
+    }
 
+    @Transactional
+    public List<Student> findStudentByAgelessThan(int age) {
 
-
+        if (age > 0) {
+            List<Student> students = this.studentRepo.findStudentbyAgeLessThan(age);
+            if (students.isEmpty()== false) {
+                return students;
+            }
+        }
+          throw new ListEmptyException();
 
     }
 
+    @Transactional
+    public List<Student> findStudentByAgeHigherthan(int age){
+        if(age > 0){
+            List<Student> students = this.studentRepo.findStudentbyAgeHigherThan(age);
+            if(students.isEmpty()==false){
+                return students;
+            }
+        }
+        throw new ListEmptyException();
+
+    }
+
+    @Transactional
+    public List<Student> findStudentByAgeBetween(int age1,int age2){
+        if(age1 < age2 || age2 > 0 || age1 > 0){
+            List<Student> students = this.studentRepo.findStudentByAgeBetween(age1,age2);
+            if(students.isEmpty()==false){
+                return students;
+            }
+        }
+        throw new ListEmptyException();
+    }
+
+    public List<String> getAllStudentsAdress(){
+        List<String> strings = this.studentRepo.getAllStudentAdress();
+
+        if(strings.isEmpty()== false){
+            return strings;
+        }
+        throw new ListEmptyException();
+    }
 
 }

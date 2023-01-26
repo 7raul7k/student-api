@@ -50,6 +50,35 @@ public class StudentResources {
         return new ResponseEntity<>("Student was updated",HttpStatus.ACCEPTED);
     }
 
+    @GetMapping("/ageLessThan/{age}")
+    public ResponseEntity<List<Student>> findStudentByAgeLessThan(@PathVariable int age){
+       List<Student> students = this.studentService.findStudentByAgelessThan(age);
+
+       return new ResponseEntity<>(students,HttpStatus.OK);
+    }
+
+    @GetMapping("/ageHigherThan/{age}")
+    public ResponseEntity<List<Student>> findStudentbyAgeHigherThan(@PathVariable int age){
+        List<Student> students = this.studentService.findStudentByAgeHigherthan(age);
+
+        return new ResponseEntity<>(students,HttpStatus.OK);
+    }
+
+    @GetMapping("/ageBetweenThan/{age1}&{age2}")
+    public ResponseEntity<List<Student>> findStudentByAgeBetweenThan(@PathVariable int age1,@PathVariable int age2){
+        List<Student> students = this.studentService.findStudentByAgeBetween(age1,age2);
+
+        return new ResponseEntity<>(students,HttpStatus.OK);
+    }
+    @GetMapping("/allStudentAdress")
+    public ResponseEntity<List<String>> getAllStudentAdress(){
+        List<String> strings = this.studentService.getAllStudentsAdress();
+
+        return new ResponseEntity<>(strings,HttpStatus.OK) ;
+    }
+
+
+
 
 
 
