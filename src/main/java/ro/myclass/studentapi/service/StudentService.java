@@ -1,9 +1,10 @@
 package ro.myclass.studentapi.service;
 
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import ro.myclass.studentapi.dto.StudentDTO;
 import ro.myclass.studentapi.exceptions.ListEmptyException;
-import ro.myclass.studentapi.exceptions.StudentExistException;
+import ro.myclass.studentapi.exceptions.StudentWasFoundException;
 import ro.myclass.studentapi.exceptions.StudentNotFoundException;
 import ro.myclass.studentapi.models.Student;
 import ro.myclass.studentapi.repo.StudentRepo;
@@ -33,41 +34,56 @@ public class StudentService {
     }
 
     @Transactional
-    public void addStudent(Student m) {
-        Optional<Student> student1 = this.studentRepo.findStudentByFirstAndLastName(m.getFirstName(), m.getLastName());
-        if (m.getFirstName() == null && m.getLastName() == null) {
-            if (student1.isEmpty()) {
-                throw new StudentExistException();
-            }
-        } else {
-            if (student1.isEmpty() == false) {
-                this.studentRepo.saveAndFlush(m);
-            }
+    @Modifying
+    public StudentDTO addStudent(StudentDTO m) {
+        Optional<Student> student = this.studentRepo.findStudentByFirstAndLastName(m.getFirstName(), m.getLastName());
+        if (student.isEmpty() == false) {
+            throw new StudentNotFoundException();
+        }else{
+            Student student1 = Student.builder().firstName(m.getFirstName())
+                    .lastName(m.getLastName())
+                    .adress(m.getAdress())
+                    .age(m.getAge())
+                    .build();
+
+            studentRepo.save(student1);
+
+            return m;
+
+
         }
+
     }
 
-    public void deleteStudent(Student m) {
-        Optional<Student> student = this.studentRepo.findStudentByFirstAndLastName(m.getFirstName(), m.getLastName());
-        if (student.isEmpty()) {
-            throw new StudentExistException();
+    public boolean deleteStudent(String email) {
+        Optional<Student> student = this.studentRepo.findStudentByEmail(email);
+
+        if (student.isEmpty() ) {
+            throw new StudentNotFoundException();
+        }else{
+            this.studentRepo.delete(student.get());
+
+            return true;
         }
 
     }
 
     @Transactional
-    public void findStudentByEmail(String email) {
+    public boolean findStudentByEmail(String email) {
         Optional<Student> student = this.studentRepo.findStudentByEmail(email);
 
         if (student.isEmpty()) {
             throw new StudentNotFoundException();
         } else {
             this.studentRepo.delete(student.get());
+
+            return true;
         }
     }
 
 
     @Transactional
-    public void updateStudent(StudentDTO studentDTO) {
+    public boolean updateStudent(StudentDTO studentDTO) {
 
 
         Optional<Student> student = this.studentRepo.findStudentByEmail(studentDTO.getEmail());
@@ -86,6 +102,7 @@ public class StudentService {
                student.get().setAdress(studentDTO.getAdress());
            }
             this.studentRepo.saveAndFlush(student.get());
+           return true;
         }
     }
 
