@@ -34,7 +34,7 @@ public class StudentResources {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Student> getAllStudents(@RequestBody Student student){
+    public ResponseEntity<StudentDTO> getAllStudents(@RequestBody StudentDTO student){
         log.info("REST requests to add student {}",student);
          studentService.addStudent(student);
         return new ResponseEntity<>(student, HttpStatus.ACCEPTED);

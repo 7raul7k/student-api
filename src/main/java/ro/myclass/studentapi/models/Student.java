@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+
+import static javax.persistence.GenerationType.SEQUENCE;
 
 @Data
 @Table(name = "student_db")
@@ -16,15 +19,45 @@ import javax.persistence.*;
 @SuperBuilder
 public class Student implements Comparable<Student>{
 
-    @GeneratedValue(strategy = GenerationType.AUTO)
 
     @Id
-
+    @SequenceGenerator(name = "student_sequence",
+    sequenceName = "student_sequence",
+    allocationSize = 1)
+    @GeneratedValue(
+            strategy = SEQUENCE,
+            generator = "student_sequence"
+    )
+    @Column(
+            name = "id"
+    )
     private long id;
+
+    @Column(name = "student_firstName",
+    nullable = false,
+    columnDefinition = "TEXT")
+    @NotEmpty
     private String firstName;
+    @Column(name = "student_lastName",
+    nullable = false,
+    columnDefinition = "TEXT")
+    @NotEmpty
     private String lastName;
+
+    @Column(name = "student_age",
+    nullable = false,
+    columnDefinition = "INT")
+    @NotEmpty
     private int age;
+    @Column(name = "student_adress",
+    nullable = false,
+    columnDefinition = "TEXT")
+    @NotEmpty
     private String adress;
+    @Column(name = "student_email",
+    nullable = false,
+    columnDefinition = "TEXT")
+    @NotEmpty
     private String email;
 
     public Student(String firstName, String lastName, int age, String adress, String email) {
