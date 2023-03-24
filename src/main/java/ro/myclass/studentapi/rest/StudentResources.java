@@ -37,12 +37,12 @@ public class StudentResources {
     public ResponseEntity<StudentDTO> getAllStudents(@RequestBody StudentDTO student){
         log.info("REST requests to add student {}",student);
          studentService.addStudent(student);
-        return new ResponseEntity<>(student, HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(student, HttpStatus.CREATED);
     }
     @DeleteMapping("/delete")
     public ResponseEntity<String> deleteStudent(@RequestParam String email){
         log.info("REST requests to get students by email {}",email);
-        this.studentService.findStudentByEmail(email);
+        this.studentService.deleteStudent(email);
 
         return new ResponseEntity<>("Student was deleted",HttpStatus.ACCEPTED);
     }
@@ -54,8 +54,8 @@ public class StudentResources {
         return new ResponseEntity<>("Student was updated",HttpStatus.ACCEPTED);
     }
 
-    @GetMapping("/ageLessThan/{age}")
-    public ResponseEntity<List<Student>> findStudentByAgeLessThan(@PathVariable int age){
+    @GetMapping("/ageLessThan/")
+    public ResponseEntity<List<Student>> findStudentByAgeLessThan(@RequestParam int age){
 
         log.info("REST requests to get student by age less than {}",age);
        List<Student> students = this.studentService.findStudentByAgelessThan(age);
@@ -63,16 +63,16 @@ public class StudentResources {
        return new ResponseEntity<>(students,HttpStatus.OK);
     }
 
-    @GetMapping("/ageHigherThan/{age}")
-    public ResponseEntity<List<Student>> findStudentbyAgeHigherThan(@PathVariable int age){
+    @GetMapping("/ageHigherThan/")
+    public ResponseEntity<List<Student>> findStudentbyAgeHigherThan(@RequestParam int age){
         log.info("REST requests to get student by age higher than {}",age);
         List<Student> students = this.studentService.findStudentByAgeHigherthan(age);
 
         return new ResponseEntity<>(students,HttpStatus.OK);
     }
 
-    @GetMapping("/ageBetweenThan/{age1}&{age2}")
-    public ResponseEntity<List<Student>> findStudentByAgeBetweenThan(@PathVariable int age1,@PathVariable int age2){
+    @GetMapping("/ageBetweenThan/")
+    public ResponseEntity<List<Student>> findStudentByAgeBetweenThan(@RequestParam int age1,@RequestParam int age2){
         log.info("REST requests to student between ages {}",age1,age2);
         List<Student> students = this.studentService.findStudentByAgeBetween(age1,age2);
 
