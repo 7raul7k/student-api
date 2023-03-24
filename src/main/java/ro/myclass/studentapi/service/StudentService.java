@@ -35,55 +35,50 @@ public class StudentService {
 
     @Transactional
     @Modifying
-    public StudentDTO addStudent(StudentDTO m) {
+    public void addStudent(StudentDTO m) {
         Optional<Student> student = this.studentRepo.findStudentByFirstAndLastName(m.getFirstName(), m.getLastName());
         if (student.isEmpty() == false) {
-            throw new StudentNotFoundException();
+            throw new StudentWasFoundException();
         }else{
+
             Student student1 = Student.builder().firstName(m.getFirstName())
                     .lastName(m.getLastName())
                     .adress(m.getAdress())
                     .age(m.getAge())
+                    .email(m.getEmail())
                     .build();
 
             studentRepo.save(student1);
 
-            return m;
-
-
         }
 
     }
 
-    public boolean deleteStudent(String email) {
+    @Transactional
+    @Modifying
+    public void deleteStudent(String email) {
         Optional<Student> student = this.studentRepo.findStudentByEmail(email);
-
-        if (student.isEmpty() ) {
+        if(student.isEmpty()){
             throw new StudentNotFoundException();
         }else{
-            this.studentRepo.delete(student.get());
-
-            return true;
+            this.studentRepo.delete(student.orElseThrow());
         }
 
     }
 
     @Transactional
-    public boolean findStudentByEmail(String email) {
+    public Student findStudentByEmail(String email) {
         Optional<Student> student = this.studentRepo.findStudentByEmail(email);
-
-        if (student.isEmpty()) {
+        if(student.isEmpty()){
             throw new StudentNotFoundException();
-        } else {
-            this.studentRepo.delete(student.get());
-
-            return true;
+        }else{
+            return student.get();
         }
     }
 
 
     @Transactional
-    public boolean updateStudent(StudentDTO studentDTO) {
+    public void updateStudent(StudentDTO studentDTO) {
 
 
         Optional<Student> student = this.studentRepo.findStudentByEmail(studentDTO.getEmail());
@@ -102,7 +97,7 @@ public class StudentService {
                student.get().setAdress(studentDTO.getAdress());
            }
             this.studentRepo.saveAndFlush(student.get());
-           return true;
+
         }
     }
 
