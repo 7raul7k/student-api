@@ -39,8 +39,6 @@ public class StudentResources {
          studentService.addStudent(student);
         return new ResponseEntity<>(student, HttpStatus.ACCEPTED);
     }
-
-
     @DeleteMapping("/delete")
     public ResponseEntity<String> deleteStudent(@RequestParam String email){
         log.info("REST requests to get students by email {}",email);
@@ -88,9 +86,6 @@ public class StudentResources {
 
         return new ResponseEntity<>(strings,HttpStatus.OK) ;
     }
-
-
-
 
 
 
