@@ -13,7 +13,7 @@ import static javax.persistence.GenerationType.SEQUENCE;
 
 @Data
 @Table(name = "student_db")
-@Entity
+@Entity(name = "Student")
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder

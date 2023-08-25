@@ -16,6 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1")
 @Slf4j
+@CrossOrigin
 public class StudentResources {
 
     private StudentService studentService;
@@ -87,6 +88,26 @@ public class StudentResources {
         return new ResponseEntity<>(strings,HttpStatus.OK) ;
     }
 
+    @GetMapping("/findStudentByEmail")
+    public ResponseEntity<Student> findStudentByEmail(@RequestParam String email){
+
+        Student student = this.studentService.findStudentByEmail(email);
+
+        log.info("REST request to get student by email {}",email);
+
+        return new ResponseEntity<>(student,HttpStatus.OK);
+    }
+
+    @GetMapping("/getStudentById")
+    public ResponseEntity<Student> getStudentById(@RequestParam int id){
+
+        Student student = this.studentService.getStudentById(id);
+
+        log.info("REST request to get student by id {}",id);
+
+        return new ResponseEntity<>(student,HttpStatus.OK);
+
+    }
 
 
 

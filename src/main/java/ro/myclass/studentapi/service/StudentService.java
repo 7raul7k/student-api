@@ -35,7 +35,7 @@ public class StudentService {
 
     @Transactional
     @Modifying
-    public void     addStudent(StudentDTO m) {
+    public void   addStudent(StudentDTO m) {
         Optional<Student> student = this.studentRepo.findStudentByFirstAndLastName(m.getFirstName(), m.getLastName());
         if (student.isEmpty() == false) {
             throw new StudentWasFoundException();
@@ -87,13 +87,16 @@ public class StudentService {
         } else {
 
            if(studentDTO.getLastName()!=null) {
-
                student.get().setLastName(studentDTO.getLastName());
-           } else if (studentDTO.getFirstName()!= null) {
+           }
+           if (studentDTO.getFirstName()!= null) {
                student.get().setFirstName(studentDTO.getFirstName());
-           } else if (studentDTO.getAge() < 0 ){
+           }
+
+           if (studentDTO.getAge() > 0 ){
                student.get().setAge(studentDTO.getAge());
-            }else if (studentDTO.getAdress()!= null){
+            }
+           if (studentDTO.getAdress()!= null){
                student.get().setAdress(studentDTO.getAdress());
            }
             this.studentRepo.saveAndFlush(student.get());
@@ -145,6 +148,17 @@ public class StudentService {
         }else{
         throw new ListEmptyException();
     }
+    }
+
+    public Student getStudentById(int id){
+
+        Optional<Student> student = this.studentRepo.getStudentsById(id);
+
+        if(student.isEmpty()){
+            throw new StudentNotFoundException();
+        }else{
+            return student.get();
+        }
     }
 
 }

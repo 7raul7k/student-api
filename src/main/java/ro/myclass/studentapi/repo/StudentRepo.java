@@ -15,7 +15,8 @@ public interface StudentRepo extends JpaRepository<Student,Long> {
     @Query("Select student from Student student where student.firstName = ?1 AND student.lastName = ?2")
     Optional<Student> findStudentByFirstAndLastName(String firstName,String lastName);
 
-   @Query("Select student from Student student where student.email = ?1")
+
+    @Query("select s from Student s where s.email = ?1")
     Optional<Student> findStudentByEmail(String email);
 
    @Query("Select student from Student student where student.age < ?1")
@@ -29,5 +30,7 @@ public interface StudentRepo extends JpaRepository<Student,Long> {
 
    @Query("SELECT student.adress from Student student")
     List<String> getAllStudentAdress();
+
+   Optional<Student> getStudentsById(long id);
 }
 
