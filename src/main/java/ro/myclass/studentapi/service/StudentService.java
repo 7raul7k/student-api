@@ -35,7 +35,7 @@ public class StudentService {
 
     @Transactional
     @Modifying
-    public void addStudent(StudentDTO m) {
+    public void   addStudent(StudentDTO m) {
         Optional<Student> student = this.studentRepo.findStudentByFirstAndLastName(m.getFirstName(), m.getLastName());
         if (student.isEmpty() == false) {
             throw new StudentWasFoundException();
@@ -61,7 +61,7 @@ public class StudentService {
         if(student.isEmpty()){
             throw new StudentNotFoundException();
         }else{
-            this.studentRepo.delete(student.orElseThrow());
+            this.studentRepo.delete(student.get());
         }
 
     }
@@ -87,13 +87,16 @@ public class StudentService {
         } else {
 
            if(studentDTO.getLastName()!=null) {
-
                student.get().setLastName(studentDTO.getLastName());
-           } else if (studentDTO.getFirstName()!= null) {
+           }
+           if (studentDTO.getFirstName()!= null) {
                student.get().setFirstName(studentDTO.getFirstName());
-           } else if (studentDTO.getAge() < 0 ){
+           }
+
+           if (studentDTO.getAge() > 0 ){
                student.get().setAge(studentDTO.getAge());
-            }else if (studentDTO.getAdress()!= null){
+            }
+           if (studentDTO.getAdress()!= null){
                student.get().setAdress(studentDTO.getAdress());
            }
             this.studentRepo.saveAndFlush(student.get());
@@ -128,13 +131,13 @@ public class StudentService {
 
     @Transactional
     public List<Student> findStudentByAgeBetween(int age1,int age2){
-        if(age1 < age2 || age2 > 0 || age1 > 0){
             List<Student> students = this.studentRepo.findStudentByAgeBetween(age1,age2);
-            if(students.isEmpty()==false){
+            if(students.isEmpty()){
+
+                throw new ListEmptyException();
+            }else {
                 return students;
             }
-        }
-        throw new ListEmptyException();
     }
 
     public List<String> getAllStudentsAdress(){
@@ -142,8 +145,20 @@ public class StudentService {
 
         if(strings.isEmpty()== false){
             return strings;
-        }
+        }else{
         throw new ListEmptyException();
+    }
+    }
+
+    public Student getStudentById(int id){
+
+        Optional<Student> student = this.studentRepo.getStudentsById(id);
+
+        if(student.isEmpty()){
+            throw new StudentNotFoundException();
+        }else{
+            return student.get();
+        }
     }
 
 }
