@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ro.myclass.studentapi.dto.StudentDTO;
+import ro.myclass.studentapi.exceptions.ListEmptyException;
 import ro.myclass.studentapi.models.Student;
 import ro.myclass.studentapi.repo.StudentRepo;
 import ro.myclass.studentapi.service.StudentService;
@@ -26,12 +27,17 @@ public class StudentResources {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<Student>> getAllStudents(){
+    public ResponseEntity<List<Student>> getAllStudents() throws InterruptedException {
 
 
         List<Student> students = this.studentService.getAllStudents();
         log.info("REST requests to get all students {}",students);
-        return new ResponseEntity<>(students, HttpStatus.OK);
+
+
+        Thread.sleep(5000);
+
+
+        return new ResponseEntity<>(students, HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping("/add")
