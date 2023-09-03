@@ -150,7 +150,7 @@ public class StudentService {
     }
     }
 
-    public Student getStudentById(int id){
+    public Student getStudentById(int id)   {
 
         Optional<Student> student = this.studentRepo.getStudentsById(id);
 
